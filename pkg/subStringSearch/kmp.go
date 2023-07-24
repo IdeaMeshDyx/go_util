@@ -39,4 +39,26 @@ func getThenext(next []int, s string) {
 	}
 }
 
-func strStr() int {}
+func strStr(haystack string, needle string) int {
+	// 由于空字符串是所有字符串的子集，所以返回第一个位置就可i
+	if len(needle) == 0 {
+		return 0
+	}
+	// 创建 Next 数据，用以存储模式串 needle 的匹配结果
+	next := make([]int, len(needle))
+	getNext(next, needle)
+	//
+	pos := 0
+	for i := 0; i < len(haystack); i++ {
+		for pos > 0 && haystack[i] != needle[pos] {
+			pos = next[pos-1]
+		}
+		if haystack[i] == needle[pos] {
+			pos++
+		}
+		if pos == len(needle) { // j指向了模式串的末尾
+			return i - len(needle) + 1
+		}
+	}
+	return -1
+}
